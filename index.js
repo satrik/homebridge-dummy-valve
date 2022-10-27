@@ -28,7 +28,22 @@ function DummyValve(log, config) {
   this.service = new Service.Valve(this.name)
 
   this.storage.initSync({dir:this.cacheDirectory, forgiveParseErrors: true})
+  
+  let cachedActive = this.storage.getItemSync(this.name)
+
+  if((cachedActive === undefined) || (cachedActive === false) || (cachedActive === 0)) {
     
+    this.service.setCharacteristic(Characteristic.InUse, 0)
+    this.service.setCharacteristic(Characteristic.Active, 0)
+    this.storage.setItemSync(this.name, 0)
+
+  } else {
+    
+    this.service.setCharacteristic(Characteristic.InUse, 1)
+    this.service.setCharacteristic(Characteristic.Active, 1)
+  
+  }
+
 }
 
 DummyValve.prototype =  {
@@ -48,6 +63,7 @@ DummyValve.prototype =  {
   getActive: function() {
 
     let cachedActive = this.storage.getItemSync(this.name)
+
     this.service.getCharacteristic(Characteristic.InUse).updateValue(cachedActive)
     this.service.getCharacteristic(Characteristic.Active).updateValue(cachedActive)
       
