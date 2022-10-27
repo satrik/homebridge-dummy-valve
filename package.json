@@ -2,7 +2,7 @@
   "name": "homebridge-dummy-valve",
   "displayName": "Hombridge Dummy Valve",
   "version": "1.0.0",
-  "description": "Dummy Valve for Homebridge",
+  "description": "Plugin to create stateful dummy valve/water faucet switches in homebridge",
   "author": "Sascha Petrik",
   "license": "MIT",
   "keywords": [
@@ -10,10 +10,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/satrik/homebridge-bslamp2.git"
+    "url": "git+https://github.com/satrik/homebridge-dummy-valve.git"
   },
   "bugs": {
-    "url": "https://github.com/satrik/homebridge-bslamp2/issues"
+    "url": "https://github.com/satrik/homebridge-dummy-valve/issues"
   },
   "engines": {
     "node": ">=0.12.0",
@@ -21,10 +21,5 @@
   },
   "dependencies": {
     "node-persist": "^2.1.0"
-  },
-  "homepage": "https://github.com/satrik/homebridge-bslamp2#readme",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   }
 }

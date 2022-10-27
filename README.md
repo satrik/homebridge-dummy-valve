@@ -17,6 +17,7 @@ sudo npm install -g homebridge-dummy-valve
 - `name` optional: displayname of your device (default: DummyValveSwitch)
 
 ## Images
+
 <p align="center">
     <img src="img/prev_closed_on.jpg" width="300"><br><br>
     <img src="img/prev_closed_off.jpg" width="300"><br><br>
