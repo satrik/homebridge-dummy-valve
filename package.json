@@ -1,7 +1,7 @@
 {
   "name": "homebridge-dummy-valve",
   "displayName": "Hombridge Dummy Valve",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Plugin to create stateful dummy valve/water faucet switches in homebridge",
   "author": "Sascha Petrik",
   "license": "MIT",
