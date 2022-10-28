@@ -33,14 +33,14 @@ function DummyValve(log, config) {
 
   if((cachedActive === undefined) || (cachedActive === false) || (cachedActive === 0)) {
     
-    this.service.setCharacteristic(Characteristic.InUse, 0)
-    this.service.setCharacteristic(Characteristic.Active, 0)
+    this.service.getCharacteristic(Characteristic.Active).updateValue(0)
+    this.service.getCharacteristic(Characteristic.InUse).updateValue(0)
     this.storage.setItemSync(this.name, 0)
 
   } else {
-    
-    this.service.setCharacteristic(Characteristic.InUse, 1)
-    this.service.setCharacteristic(Characteristic.Active, 1)
+
+    this.service.getCharacteristic(Characteristic.Active).updateValue(1)
+    this.service.getCharacteristic(Characteristic.InUse).updateValue(1)
   
   }
 
@@ -48,29 +48,6 @@ function DummyValve(log, config) {
 
 DummyValve.prototype =  {
   
-  setActive: function(on) {
-
-    let state = (on == 0 ? "Off" : "On")
-    this.log("set 'Active' to => " + state)
-  
-    this.storage.setItemSync(this.name, on)
-  
-    this.service.getCharacteristic(Characteristic.InUse).updateValue(on)
-    this.service.getCharacteristic(Characteristic.Active).updateValue(on)
-      
-  },
-  
-  getActive: function() {
-
-    let cachedActive = this.storage.getItemSync(this.name)
-
-    this.service.getCharacteristic(Characteristic.InUse).updateValue(cachedActive)
-    this.service.getCharacteristic(Characteristic.Active).updateValue(cachedActive)
-      
-    return cachedActive
-  
-  },
-
   getServices: function () {
   
     this.informationService = new Service.AccessoryInformation()
@@ -83,8 +60,37 @@ DummyValve.prototype =  {
       .setCharacteristic(Characteristic.ValveType, 0)
   
     this.service.getCharacteristic(Characteristic.Active)
-      .onGet(this.getActive.bind(this))
-      .onSet(this.setActive.bind(this))
+      .onSet(async (value) => {
+
+        this.log("set 'Active' to => " + (value == 0 ? "Off" : "On"))
+        
+        this.storage.setItemSync(this.name, value)
+
+        if(value == 0) {
+
+          this.service.getCharacteristic(Characteristic.InUse).updateValue(value)
+          setTimeout(() => {
+            this.service.getCharacteristic(Characteristic.Active).updateValue(value)
+          }, 50)
+
+        } else {
+
+          this.service.getCharacteristic(Characteristic.Active).updateValue(value)
+          setTimeout(() => {
+            this.service.getCharacteristic(Characteristic.InUse).updateValue(value)  
+          }, 50)
+        
+        }
+       
+      })
+      .onGet(async () => {
+        
+        let cachedActive = this.storage.getItemSync(this.name)
+        this.service.getCharacteristic(Characteristic.Active).updateValue(cachedActive)    
+        this.service.getCharacteristic(Characteristic.InUse).updateValue(cachedActive)  
+        return cachedActive
+
+      })
 
     return [this.informationService, this.service]
 
